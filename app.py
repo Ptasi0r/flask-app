@@ -33,6 +33,13 @@ def main():
             if answer == questions[int(pnr)]['correct']:
                 points += 1
         flash('Liczba poprawnych odpowiedzi, to: {0}'.format(points))
+        flash(user_answers)
+        correct_answers = []
+        index = 0
+        for question in questions:
+            correct_answers.append(question['correct'])
+            index += 1
+        flash(correct_answers)
         return redirect(url_for('main'))
     return render_template('index.html', questions=questions)
 

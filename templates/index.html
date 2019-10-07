@@ -1,30 +1,31 @@
+{% set response = get_flashed_messages() %}
+{% set message = response[0] %}
+{% set user_answers = response[1] %}
+{% set correct_answers = response[2] %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Python Flask Quiz</title>
+    <link rel="shortcut icon" href="static/icon.ico" type="image/x-icon">
 </head>
 <style>
     body{
         height: 100vh;
     }
 
-    label {
-        
-    }
 </style>
 <body>
 <header class="h-25 w-100 text-center bg-info text-white d-flex align-items-center justify-content-center flex-column">
     <h1>Witaj, przywoływaczu!</h1>
-    {% for message in get_flashed_messages() %}
-        <h2>{{ message }}</h2>
-    {% endfor %}
+    <h2>{{ message }}</h2>
 </header>
 <main class="p-3 container">
     <form method="post">
         {% for q in questions %}
-            <div class="my-4">
+            <div class="question my-4">
                 <h2 class="text-info">{{ q.question}}</h2>
                 {% set pnr = loop.index0 %}
                 {% for answer in q.answers %}
@@ -32,8 +33,32 @@
                 {% endfor %}
             </div>
         {% endfor %}
-        <input type="submit" class="btn btn-primary btn-lg" value="Send question">
+        <div class="text-center">
+            <input type="submit" class="btn btn-primary btn-lg" value="Send question">
+        </div>
     </form>
+    {% if response %}
+        <script>
+            const answers = {{user_answers|tojson}};
+            const correctAnswers = {{correct_answers|tojson}};
+            const questionContainer = document.querySelectorAll('.question')
+            questionContainer.forEach((container, index) => {
+                const labels = container.querySelectorAll('label')
+	            labels.forEach(label => {
+	                if(label.textContent == `  ${correctAnswers[index]} `){
+	                    label.classList.add('text-success')
+	                    if(correctAnswers[index] == answers[index]) {
+	                        label.querySelector('input[type="radio"]').checked = true;
+	                    }
+	                } else if(label.textContent == `  ${answers[index]} `){
+	                    label.classList.add('text-danger')
+	                    label.querySelector('input[type="radio"]').checked = true;
+	                }
+	            })
+            });
+        </script>
+
+    {% endif %}
 </main>
 </body>
 </html>

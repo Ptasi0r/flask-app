@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Python Flask Quiz</title>
+</head>
+<style>
+    body{
+        height: 100vh;
+    }
+
+    label {
+        
+    }
+</style>
+<body>
+<header class="h-25 w-100 text-center bg-info text-white d-flex align-items-center justify-content-center flex-column">
+    <h1>Witaj, przywoływaczu!</h1>
+    {% for message in get_flashed_messages() %}
+        <h2>{{ message }}</h2>
+    {% endfor %}
+</header>
+<main class="p-3 container">
+    <form method="post">
+        {% for q in questions %}
+            <div class="my-4">
+                <h2 class="text-info">{{ q.question}}</h2>
+                {% set pnr = loop.index0 %}
+                {% for answer in q.answers %}
+                    <label class="h4 m-2"> <input type="radio" value="{{ answer }}" name="{{ pnr }}" required> {{answer}} </label> <br>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <input type="submit" class="btn btn-primary btn-lg" value="Send question">
+    </form>
+</main>
+</body>
+</html>

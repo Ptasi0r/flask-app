@@ -40,6 +40,7 @@ connection = pymysql.connect(host='eu-cdbr-west-02.cleardb.net',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
+
 def get_array(result):
     array = []
     for line in result:
